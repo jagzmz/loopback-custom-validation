@@ -19,6 +19,16 @@ this.EmailType = (Model, options) => {
 };
 
 this.ReadOnly = (Model, options) => {
+
+  //this wont work at PUT request
+  
+    // add property as
+    //          "profilePic":{
+    //            ...,
+    //            "readonly":true|false
+    //           }
+  
+
   this.readOnlyFields = [];
 
   let properties = Model.definition.rawProperties;

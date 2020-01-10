@@ -1,5 +1,14 @@
 var _ = require("lodash");
 module.exports = (Model, options) => {
+
+
+  // change type as email
+  // 
+  //     "email":{
+  //       type:"email"
+  //     }
+  // 
+
   this.emailFields = [];
   let properties = Model.definition.rawProperties;
   let keyName = "type";

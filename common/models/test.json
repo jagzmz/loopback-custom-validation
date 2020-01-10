@@ -7,7 +7,8 @@
   },
   "properties": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "readonly":true
     },
     "email": {
       "type": "email"
