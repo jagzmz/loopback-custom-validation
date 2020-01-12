@@ -5,7 +5,6 @@ module.exports = (Model, options) => {
 
   _.forEach(customValidation, prop => {
     if (typeof this[prop] === "function") {
-      options.fieldName = prop.toLowerCase();
       this[prop](Model, options);
     } else {
       throw new Error(`Function defination for '${prop}' not given`);
@@ -14,56 +13,11 @@ module.exports = (Model, options) => {
 };
 
 this.EmailType = (Model, options) => {
-  var emailValidate = require("./emailValidate");
-  emailValidate(Model, options);
+  require("./emailValidate")(Model, options);
 };
 
-this.ReadOnly = (Model, options) => {
-
-  //this wont work at PUT request
-  
-    // add property as
-    //          "profilePic":{
-    //            ...,
-    //            "readonly":true|false
-    //           }
-  
-
-  this.readOnlyFields = [];
-
-  let properties = Model.definition.rawProperties;
-
-  for (let field in properties) {
-    let fieldName = options.fieldName;
-    if (
-      properties.hasOwnProperty(field) &&
-      fieldName in properties[field] &&
-      properties[field][fieldName] === true
-    ) {
-      this.readOnlyFields.push(field);
-    }
-  }
-
-  Model.observe("before save", (ctx, next) => {
-    let instance = ctx.instance || ctx.data;
-    if (ctx.isNewInstance) {
-      next();
-      return;
-    } else {
-      this.stripReadOnly(instance);
-    }
-    next();
-  });
-
-  this.stripReadOnly = instance => {
-    let keySet = _.keys(instance);
-    _.forEach(keySet, key => {
-      if (this.readOnlyFields.includes(key)) {
-        console.log(`Instance contains readOnly field '${key}'`);
-        delete instance[key];
-      }
-    });
-  };
+this.ConstantValidation = (Model, options) => {
+  require("./constantValidation")(Model, options);
 };
 
 //for put

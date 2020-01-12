@@ -8,7 +8,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "readonly":true
+      "readonly": true
     },
     "email": {
       "type": "email"
@@ -18,7 +18,9 @@
   "relations": {},
   "acls": [],
   "methods": {},
-  "mixins":{
-    "Validation":true
+  "mixins": {
+    "Validation": {
+      "defEmailErrMsg": ""
+    }
   }
 }

@@ -1,15 +1,6 @@
 var _ = require("lodash");
-module.exports = (Model, options) => {
 
-
-  // change type as email
-  // 
-  //     "email":{
-  //       type:"email"
-  //     }
-  // 
-
-  this.emailFields = [];
+this.populateEmailFields = (Model, arr) => {
   let properties = Model.definition.rawProperties;
   let keyName = "type";
   let customValue = "email";
@@ -20,58 +11,53 @@ module.exports = (Model, options) => {
     ) {
       this.emailFields.push(field);
 
-      Model.definition.rawProperties[field][keyName] = Model.definition.properties[field][keyName] = String;
+      Model.definition.rawProperties[field][
+        keyName
+      ] = Model.definition.properties[field][keyName] = String;
     }
   }
+};
+this.emailValidator = email => {
+  let isEmail = require("isemail"),
+    formatErr = require("./helper.js").formatErr;
+  newErr = formatErr(this.defErrMsg, email);
+  if (!isEmail.validate(email)) {
+    throw new Error(newErr);
+  }
+};
 
-  Model.observe("before save", (ctx, next) => {
-    
-
+this.checkForValidMail = (ctx, next) => {
+  try {
     let instance = ctx.instance || ctx.data;
-    if (ctx.isNewInstance) {
+    if (ctx.isNewInstance && instance.__data) {
       instance = instance.__data;
     }
-    // console.log(instance)
-    // let keySet = _.get(instance,_.keys(instance['__data']),_.keys(instance))
 
-    let keySet= instance.__data ? _.keys(instance.__data) : _.keys(instance)
-    // _.keys(instance.__data)||_.keys(instance)
+    let keySet = instance.__data ? _.keys(instance.__data) : _.keys(instance);
 
-    console.log(this.emailFields, instance,keySet);
+    console.log(this.emailFields, instance, keySet);
     let err = [];
     let promises = [];
-    keySet.forEach(key => {
-      if (this.emailFields.includes(key)) {
-        console.log(key)
-        promises.push(emailValidator(instance[key]));
-        // try {
-        //     await emailValidator(instance[key])
-        // } catch (error) {
-        //     console.log(error)
-        //     err.push(error)
-        // }
-        // emailValidator(instance[key])
-        // .then(ok=>console.log(instance[key]+"  ... ok"))
-        // .catch(rej=>{console.log("Error inside emailValidator"); err.push(rej); console.log(err)})
-      }
-    });
-    //   console.log(promises)
 
-    Promise.all(promises)
-      .catch(rej => {
-        next(rej);
-      })
-      .then(res => next());
-    
+    for (let key of keySet) {
+      if (this.emailFields.includes(key)) {
+        let email = instance[key];
+        this.emailValidator(email);
+      }
+    }
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports = (Model, options) => {
+  this.defErrMsg = options.defEmailErrMsg || "Invalid email %s";
+  this.emailFields = [];
+  this.populateEmailFields(Model, this.emailFields);
+
+  Model.observe("before save", (ctx, next) => {
+    this.checkForValidMail(ctx, next);
   });
 };
-function emailValidator(email) {
-  let isEmail = require("isemail");
-  return new Promise((resolve, reject) => {
-    if (!isEmail.validate(email)) {
-      reject(`Invalid Email...'${email}'`);
-    } else {
-      resolve();
-    }
-  });
-}
+
