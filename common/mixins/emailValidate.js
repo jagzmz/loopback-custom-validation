@@ -1,4 +1,5 @@
-var _ = require("lodash");
+var _ = require("lodash")
+debug=require('debug')('custom-validation:email')
 
 this.populateEmailFields = (Model, arr) => {
   let properties = Model.definition.rawProperties;
@@ -35,7 +36,7 @@ this.checkForValidMail = (ctx, next) => {
 
     let keySet = instance.__data ? _.keys(instance.__data) : _.keys(instance);
 
-    console.log(this.emailFields, instance, keySet);
+    debug(this.emailFields, instance, keySet);
     let err = [];
     let promises = [];
 
