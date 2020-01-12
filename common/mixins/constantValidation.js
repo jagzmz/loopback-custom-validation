@@ -1,21 +1,20 @@
-module.exports=(Model,options)=>{
-    //this wont work at PUT request
-  
-    // add property as
-    //          "profilePic":{
-    //            ...,
-    //            "readonly":true|false
-    //           }
-  
- 
+module.exports = (Model, options) => {
+  //this wont work at PUT request
+
+  // add property as
+  //          "profilePic":{
+  //            ...,
+  //            "readonly":true|false
+  //           }
+
+  var _ = require("lodash");
+  var debug=require('debug')('custom-validation:constant')
   this.constantFields = [];
 
   let properties = Model.definition.rawProperties;
 
-
-
   for (let field in properties) {
-    let fieldName = options.fieldName;
+    let fieldName = "constant";
     if (
       properties.hasOwnProperty(field) &&
       fieldName in properties[field] &&
@@ -40,9 +39,9 @@ module.exports=(Model,options)=>{
     let keySet = _.keys(instance);
     _.forEach(keySet, key => {
       if (this.constantFields.includes(key)) {
-        console.log(`Instance contains constant field '${key}'`);
+        debug(`Instance contains constant field '${key}'`);
         delete instance[key];
       }
     });
   };
-}
+};
