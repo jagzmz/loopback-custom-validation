@@ -1,1 +1,1 @@
-module.exports=["ConstantValidation","EmailType"]
+module.exports=["ConstantValidation","EmailType","StringValidation"]

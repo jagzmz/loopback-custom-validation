@@ -35,7 +35,7 @@
     "dataSource": "db",
     "public": false
   },
-  "test": {
+  "Test": {
     "dataSource": "mongoDb",
     "public": true
   }

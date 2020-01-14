@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "Test",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -8,10 +8,21 @@
   "properties": {
     "name": {
       "type": "string",
-      "constant": true
+      "constant": true,
+      "stringProps": {
+        "minLen": 5,
+        "maxLen": 200,
+        "strict": false
+      }
     },
     "email": {
       "type": "email"
+    },
+    "address":{
+      "type":"string",
+      "stringProps": {
+        
+      }
     }
   },
   "validations": [],
@@ -21,6 +32,7 @@
   "mixins": {
     "Validation": {
       "defEmailErrMsg": ""
+      
     }
   }
 }

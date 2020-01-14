@@ -13,30 +13,13 @@ module.exports = (Model, options) => {
 };
 
 this.EmailType = (Model, options) => {
-  require("./emailValidate")(Model, options);
+  require("./validations/emailValidate")(Model, options);
 };
 
 this.ConstantValidation = (Model, options) => {
-  require("./constantValidation")(Model, options);
+  require("./validations/constantValidation")(Model, options);
 };
+this.StringValidation=(Model,options)=>{
 
-//for put
-// Model.observe("before save", (ctx, next) => {
-
-//   let instance = ctx.instance || ctx.data;
-//   // console.log(instance)
-//   let keySet = _.keys(instance.__data);
-//   console.log(keySet)
-//   _.forEach(keySet, key => {
-//     console.log(key)
-//     if (this.readOnlyFields.includes(key)) {
-//       console.log(`Contains readOnly field '${key}'`)
-//       delete instance.__data[key]
-//       console.log(instance)
-//       console.log("exits");
-//     }
-//   });
-
-//   // console.log(instance)
-//   next();
-// });
+  // require("./validations/stringValidation")(Model, options);
+}
